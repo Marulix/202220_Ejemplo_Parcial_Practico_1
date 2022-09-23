@@ -29,7 +29,7 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @Transactional
-@Import(MedicoService.class)
+@Import(EspecialidadService.class)
 public class EspecialidadServiceTest {
 
     @Autowired
@@ -90,13 +90,14 @@ public class EspecialidadServiceTest {
 		assertEquals(newEntity.getNombre(), entity.getNombre());
 		assertEquals(newEntity.getDescripcion(), entity.getDescripcion());
 
+
 	}
 
 	/**
 	 * Prueba para crear un Medico con RM invalido
 	 */
 	@Test
-	void testCreateBookWithNoValidISBN() {
+	void testCreateBookWithInvalidDescription() {
 		assertThrows(IllegalOperationException.class, () -> {
 			EspecialidadEntity newEntity = factory.manufacturePojo(EspecialidadEntity.class);
 			newEntity.setDescripcion(" ");

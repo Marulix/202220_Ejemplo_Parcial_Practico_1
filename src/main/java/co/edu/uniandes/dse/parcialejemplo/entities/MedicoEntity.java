@@ -1,6 +1,7 @@
 package co.edu.uniandes.dse.parcialejemplo.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -20,7 +21,7 @@ public class MedicoEntity extends BaseEntity{
 
     @PodamExclude
     @ManyToMany(mappedBy = "medicos")
-    ArrayList<EspecialidadEntity> especialidades = new ArrayList<>();
+    List<EspecialidadEntity> especialidades = new ArrayList<>();
     
     
 }

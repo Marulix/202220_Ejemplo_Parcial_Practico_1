@@ -1,6 +1,7 @@
 package co.edu.uniandes.dse.parcialejemplo.entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -20,6 +21,6 @@ public class EspecialidadEntity extends BaseEntity{
 
     @PodamExclude
     @ManyToMany
-    ArrayList<MedicoEntity> medicos = new ArrayList<>();
+    List<MedicoEntity> medicos = new ArrayList<>();
     
 }
