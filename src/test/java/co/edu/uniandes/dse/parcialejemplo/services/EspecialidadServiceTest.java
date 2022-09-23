@@ -1,8 +1,6 @@
 package co.edu.uniandes.dse.parcialejemplo.services;
 
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +17,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import co.edu.uniandes.dse.parcialejemplo.entities.EspecialidadEntity;
 import co.edu.uniandes.dse.parcialejemplo.entities.MedicoEntity;
-import co.edu.uniandes.dse.parcialejemplo.exceptions.EntityNotFoundException;
 import co.edu.uniandes.dse.parcialejemplo.exceptions.IllegalOperationException;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 /**
- * Pruebas de logica de Medico
+ * Pruebas de logica de Especialidad
  *
  * @author ISIS2603
  */
@@ -33,17 +30,17 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 @DataJpaTest
 @Transactional
 @Import(MedicoService.class)
-class MedicoServiceTest {
+public class EspecialidadServiceTest {
 
-	@Autowired
-	private MedicoService medicoService;
+    @Autowired
+	private EspecialidadService especialidadService;
 
 	@Autowired
 	private TestEntityManager entityManager;
 
 	private PodamFactory factory = new PodamFactoryImpl();
 
-	private List<MedicoEntity> medicoList = new ArrayList<>();
+	private List<EspecialidadEntity> especialidadList = new ArrayList<>();
 
 	/**
 	 * Configuración inicial de la prueba.
@@ -58,7 +55,7 @@ class MedicoServiceTest {
 	 * Limpia las tablas que están implicadas en la prueba.
 	 */
 	private void clearData() {
-		entityManager.getEntityManager().createQuery("delete from MedicoEntity");
+		entityManager.getEntityManager().createQuery("delete from EspecialidadEntity");
 		entityManager.getEntityManager().createQuery("delete from EspecialidadEntity");
 	}
 
@@ -67,31 +64,31 @@ class MedicoServiceTest {
 	 */
 	private void insertData() {
 		for (int i = 0; i < 3; i++) {
-			MedicoEntity medicoEntity = factory.manufacturePojo(MedicoEntity.class);
-			entityManager.persist(medicoEntity);
-			medicoList.add(medicoEntity);
+			EspecialidadEntity especialidadEntity = factory.manufacturePojo(EspecialidadEntity.class);
+			entityManager.persist(especialidadEntity);
+			especialidadList.add(especialidadEntity);
 		}
 
-		EspecialidadEntity especialidadEntity = factory.manufacturePojo(EspecialidadEntity.class);
-		entityManager.persist(especialidadEntity);
-		especialidadEntity.getMedicos().add(medicoList.get(0));
-		medicoList.get(0).getEspecialidades().add(especialidadEntity);
+		MedicoEntity medicoEntity = factory.manufacturePojo(MedicoEntity.class);
+		entityManager.persist(medicoEntity);
+		medicoEntity.getEspecialidades().add(especialidadList.get(0));
+		especialidadList.get(0).getMedicos().add(medicoEntity);
 	}
 
 	/**
-	 * Prueba para crear un Medico
+	 * Prueba para crear una Especialidad
+	 * @throws IllegalOperationException
 	 */
 	@Test
-	void testCreateMedico() throws EntityNotFoundException, IllegalOperationException {
-		MedicoEntity newEntity = factory.manufacturePojo(MedicoEntity.class);
-		newEntity.setRegistroMedico("RM1234");
-		MedicoEntity result = medicoService.createMedico(newEntity);
+	void testCreateEspecialidad() throws IllegalOperationException {
+		EspecialidadEntity newEntity = factory.manufacturePojo(EspecialidadEntity.class);
+		newEntity.setDescripcion("Esta especialidad es la mas basica");
+		EspecialidadEntity result = especialidadService.createEspecialidad(newEntity);
 		assertNotNull(result);
-		MedicoEntity entity = entityManager.find(MedicoEntity.class, result.getId());
+		EspecialidadEntity entity = entityManager.find(EspecialidadEntity.class, result.getId());
 		assertEquals(newEntity.getId(), entity.getId());
 		assertEquals(newEntity.getNombre(), entity.getNombre());
-		assertEquals(newEntity.getApellido(), entity.getApellido());
-		assertEquals(newEntity.getRegistroMedico(), entity.getRegistroMedico());
+		assertEquals(newEntity.getDescripcion(), entity.getDescripcion());
 
 	}
 
@@ -99,11 +96,13 @@ class MedicoServiceTest {
 	 * Prueba para crear un Medico con RM invalido
 	 */
 	@Test
-	void testCreateMedicoWithInvalidRM() {
+	void testCreateBookWithNoValidISBN() {
 		assertThrows(IllegalOperationException.class, () -> {
-			MedicoEntity newEntity = factory.manufacturePojo(MedicoEntity.class);
-			newEntity.setRegistroMedico(" ");
-			medicoService.createMedico(newEntity);
+			EspecialidadEntity newEntity = factory.manufacturePojo(EspecialidadEntity.class);
+			newEntity.setDescripcion(" ");
+			especialidadService.createEspecialidad(newEntity);
 		});
 	}
+
+    
 }

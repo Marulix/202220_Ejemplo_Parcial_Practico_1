@@ -9,9 +9,10 @@ import lombok.Getter;
 import lombok.Setter;
 import uk.co.jemos.podam.common.PodamExclude;
 
+
+@Entity
 @Getter
 @Setter
-@Entity
 public class EspecialidadEntity extends BaseEntity{
 
     private String nombre;

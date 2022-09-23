@@ -26,7 +26,7 @@ public class MedicoEspecialidadService {
 
 
     @Transactional
-    public MedicoEntity addEspecialidad(Long medicoId, Long especialidadId) throws EntityNotFoundException{
+    public EspecialidadEntity addEspecialidad(Long medicoId, Long especialidadId) throws EntityNotFoundException{
         log.info("Inicia proceso de asociarle una especialidad al medico con id = {0}", medicoId);
         Optional<MedicoEntity> medicoEntity = medicoRepository.findById(medicoId);
 		if (medicoEntity.isEmpty())
@@ -36,9 +36,9 @@ public class MedicoEspecialidadService {
         if (especialidadEntity.isEmpty())
             throw new EntityNotFoundException(ErrorMessage.ESPECIALIDAD_NOT_FOUND);
 
-        medicoEntity.get().getEspecialidades().add(especialidadEntity.get());
+        especialidadEntity.get().getMedicos().add(medicoEntity.get());
         log.info("Termina proceso de asociarle una especialidad al medico con id = {0}", medicoId);
-        return medicoEntity.get();
+        return especialidadEntity.get();
     }
     
 }
